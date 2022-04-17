@@ -27,7 +27,7 @@ export default {
   components: {},
   data() {
     return {
-      events: [],
+      events: [{ id: 0, name: "", organizer: { name: "" }, startDate: "" }],
     };
   },
   methods: {
