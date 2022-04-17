@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <section class="row">
+    <section class="row text-center">
       <article class="col-sm-6">
         <div class="profile" :id="user.id">
           <p>E-mail cím: {{ user.email }}</p>
@@ -10,7 +10,11 @@
       </article>
       <article class="col-sm-6">
         <h5>Események amiken eddig részt vettél:</h5>
-        <div class="card" v-for="userEvent in userEvents" :key="userEvent.id">
+        <div
+          class="card mb-1"
+          v-for="userEvent in userEvents"
+          :key="userEvent.id"
+        >
           <div class="card-body">
             <h5 class="card-title">{{ userEvent.name }}</h5>
             <p class="card-text">Szervező: {{ userEvent.organizer.name }}</p>

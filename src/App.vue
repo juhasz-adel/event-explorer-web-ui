@@ -1,30 +1,52 @@
 <template>
-  <div class="navbar">
-    <a v-bind:href="'/'">Események</a>
-    <a v-bind:href="'/profil'">Profil</a>
-  </div>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" v-bind:href="'/'">Event Explorer</a>
+    <button
+      v-on:click="toggle()"
+      :class="getNavbarTogglerClass()"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarNav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div :class="getNavbarCollapseClass()">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" v-bind:href="'/'">Események</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" v-bind:href="'/profil'">Profil</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
   <router-view />
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+<script>
+export default {
+  name: "App",
+  components: {},
+  data() {
+    return {
+      isOpen: true,
+    };
+  },
+  methods: {
+    getNavbarTogglerClass() {
+      const className = "navbar-toggler";
+      return this.isOpen ? className : `${className} collapsed`;
+    },
+    toggle() {
+      this.isOpen = !this.isOpen;
+    },
+    getNavbarCollapseClass() {
+      const className = "collapse navbar-collapse collapse";
+      return this.isOpen ? className : `${className} show`;
+    },
+  },
+  mounted() {},
+};
+</script>
