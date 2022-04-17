@@ -9,7 +9,9 @@
         <div class="card-body">
           <h5 class="card-title">{{ event.name }}</h5>
           <p class="card-text">Szervező: {{ event.organizer.name }}</p>
-          <p class="card-text">Időpont: {{ formatDate(event.startDate) }}</p>
+          <p class="card-text">
+            Időpont: {{ convertToReadableDateAndTime(event.startDate) }}
+          </p>
           <button class="btn btn-primary" :id="event.id" :key="event.id">
             Érdekel
           </button>
@@ -21,6 +23,7 @@
 
 <script>
 import { getEvents } from "../services/eventService";
+import { convertToReadableDateAndTime } from "../utils/dateFormatters";
 
 export default {
   name: "Events",
@@ -31,8 +34,8 @@ export default {
     };
   },
   methods: {
-    formatDate(date) {
-      return date.toString().replace("T", " ");
+    convertToReadableDateAndTime(date) {
+      return convertToReadableDateAndTime(date);
     },
   },
   mounted() {
