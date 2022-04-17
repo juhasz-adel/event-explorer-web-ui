@@ -36,15 +36,15 @@ export default {
   },
   methods: {
     getNavbarTogglerClass() {
-      return this.isOpen ? "navbar-toggler" : "navbar-toggler collapsed";
+      const className = "navbar-toggler";
+      return this.isOpen ? className : `${className} collapsed`;
     },
     toggle() {
       this.isOpen = !this.isOpen;
     },
     getNavbarCollapseClass() {
-      return this.isOpen
-        ? "collapse navbar-collapse collapse"
-        : "collapse navbar-collapse collapse show";
+      const className = "collapse navbar-collapse collapse";
+      return this.isOpen ? className : `${className} show`;
     },
   },
   mounted() {},
