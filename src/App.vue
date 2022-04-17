@@ -50,9 +50,3 @@ export default {
   mounted() {},
 };
 </script>
-
-<style>
-#app {
-  text-align: center;
-}
-</style>

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <section class="row">
+    <section class="row text-center">
       <article class="col-sm-6">
         <div class="profile" :id="user.id">
           <p>E-mail cím: {{ user.email }}</p>
