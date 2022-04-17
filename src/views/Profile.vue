@@ -17,12 +17,8 @@
         >
           <div class="card-body">
             <h5 class="card-title">{{ userEvent.name }}</h5>
-            <p class="card-text">Szervező: {{ userEvent.organizer.name }}</p>
             <p class="card-text">
               Kezdés: {{ convertToReadableDateAndTime(userEvent.startDate) }}
-            </p>
-            <p class="card-text">
-              Vége: {{ convertToReadableDateAndTime(userEvent.endDate) }}
             </p>
           </div>
         </div>
@@ -57,9 +53,7 @@ export default {
         {
           id: 0,
           name: "",
-          organizer: { name: "" },
           startDate: "",
-          endDate: "",
         },
       ],
     };
