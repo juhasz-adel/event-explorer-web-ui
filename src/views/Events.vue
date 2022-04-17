@@ -13,6 +13,7 @@
             Időpont: {{ convertToReadableDateAndTime(event.startDate) }}
           </p>
           <button
+            v-if="isLoggedIn()"
             class="btn btn-primary"
             :id="event.id"
             :key="event.id"
@@ -31,6 +32,7 @@ import { getEvents } from "../services/eventService";
 import { attend } from "../services/attendanceService";
 import { convertToReadableDateAndTime } from "../utils/dateFormatters";
 import user from "../config/user.config.json";
+import { isLoggedIn } from "../utils/userLoggedInChecker";
 
 export default {
   name: "Events",
@@ -47,6 +49,10 @@ export default {
     attendToEvent(eventId) {
       const { id: userId } = user;
       attend(userId, eventId);
+    },
+    isLoggedIn() {
+      const { id: userId } = user;
+      return isLoggedIn(userId);
     },
   },
   mounted() {

@@ -15,7 +15,7 @@
         <li class="nav-item">
           <a class="nav-link" v-bind:href="'/'">Események</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="isLoggedIn()">
           <a class="nav-link" v-bind:href="'/profil'">Profil</a>
         </li>
       </ul>
@@ -26,12 +26,16 @@
 </template>
 
 <script>
+import user from "./config/user.config.json";
+import { isLoggedIn } from "./utils/userLoggedInChecker";
+
 export default {
   name: "App",
   components: {},
   data() {
     return {
       isOpen: true,
+      userId: user.id,
     };
   },
   methods: {
@@ -45,6 +49,9 @@ export default {
     getNavbarCollapseClass() {
       const className = "collapse navbar-collapse collapse";
       return this.isOpen ? className : `${className} show`;
+    },
+    isLoggedIn() {
+      return isLoggedIn(this.userId);
     },
   },
   mounted() {},
