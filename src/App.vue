@@ -1,6 +1,11 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" v-bind:href="'/'">Event Explorer</a>
+    <a class="navbar-brand font-weight-bold">
+      Event Explorer
+      <span class="badge badge-primary" v-if="isLoggedIn()"
+        >Bejelentkezve, mint: {{ user.lastName }} {{ user.firstName }}</span
+      >
+    </a>
     <button
       v-on:click="toggle()"
       :class="getNavbarTogglerClass()"
@@ -28,6 +33,8 @@
 <script>
 import user from "./config/user.config.json";
 import { isLoggedIn } from "./utils/userLoggedInChecker";
+import { getUser } from "./services/userService";
+import { getUserEvents } from "./services/userEventsService";
 
 export default {
   name: "App",
@@ -36,6 +43,10 @@ export default {
     return {
       isOpen: true,
       userId: user.id,
+      user: {
+        lastName: "",
+        firstName: "",
+      },
     };
   },
   methods: {
@@ -54,6 +65,11 @@ export default {
       return isLoggedIn(this.userId);
     },
   },
-  mounted() {},
+  mounted() {
+    const { id } = user;
+
+    getUser(id).then((response) => (this.user = response.data));
+    getUserEvents(id).then((response) => (this.userEvents = response.data));
+  },
 };
 </script>
