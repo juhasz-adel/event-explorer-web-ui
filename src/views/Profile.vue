@@ -9,7 +9,7 @@
         </div>
       </article>
       <article class="col-sm-6">
-        <h5>Események amiken eddig részt vettél:</h5>
+        <h5>Eseményeid:</h5>
         <div
           class="card mb-1"
           v-for="userEvent in userEvents"
