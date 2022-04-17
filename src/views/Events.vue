@@ -12,7 +12,12 @@
           <p class="card-text">
             Időpont: {{ convertToReadableDateAndTime(event.startDate) }}
           </p>
-          <button class="btn btn-primary" :id="event.id" :key="event.id">
+          <button
+            class="btn btn-primary"
+            :id="event.id"
+            :key="event.id"
+            v-on:click="attendToEvent(event.id)"
+          >
             Érdekel
           </button>
         </div>
@@ -23,7 +28,9 @@
 
 <script>
 import { getEvents } from "../services/eventService";
+import { attend } from "../services/attendanceService";
 import { convertToReadableDateAndTime } from "../utils/dateFormatters";
+import user from "../config/user.config.json";
 
 export default {
   name: "Events",
@@ -36,6 +43,10 @@ export default {
   methods: {
     convertToReadableDateAndTime(date) {
       return convertToReadableDateAndTime(date);
+    },
+    attendToEvent(eventId) {
+      const { id: userId } = user;
+      attend(userId, eventId);
     },
   },
   mounted() {
