@@ -8,27 +8,29 @@
           <p>Születési idő: {{ formatDate(user.birthDate) }}</p>
         </div>
       </article>
-
-      <div class="col-sm-6" style="font-size: 20px">
-        <p>Események amiken eddig részt vettél:</p>
-        <p>
-          Pályválasztási nap <br />
-          Helyszín: Szent-Györgyi Albert Agóra <br />
-          Időpont: 2021.09.15.
-        </p>
-        <p>
-          Diótörő <br />
-          Helyszín: Móra Ferenc Múzeum<br />
-          Időpont: 2021.11.25.
-        </p>
-      </div>
+      <article class="col-sm-6">
+        <h5>Események amiken eddig részt vettél:</h5>
+        <div class="card" v-for="userEvent in userEvents" :key="userEvent.id">
+          <div class="card-body">
+            <h5 class="card-title">{{ userEvent.name }}</h5>
+            <p class="card-text">Szervező: {{ userEvent.organizer.name }}</p>
+            <p class="card-text">
+              Kezdés: {{ formatStartDate(userEvent.startDate) }}
+            </p>
+            <p class="card-text">
+              Vége: {{ formatStartDate(userEvent.endDate) }}
+            </p>
+          </div>
+        </div>
+      </article>
     </section>
   </div>
 </template>
 
 <script>
 import { getUser } from "../services/userService";
-import userConfig from "../config/loggedInUser.json";
+import { getUserEvents } from "../services/userEventsService";
+import user from "../config/user.config.json";
 
 export default {
   name: "Profile",
@@ -43,17 +45,30 @@ export default {
         firstName: "",
         birthDate: "",
       },
+      userEvents: [
+        {
+          id: 0,
+          name: "",
+          organizer: { name: "" },
+          startDate: "",
+          endDate: "",
+        },
+      ],
     };
   },
   methods: {
     formatDate(date) {
       return date.toString().substring(0, 10);
     },
+    formatStartDate(date) {
+      return date.toString().replace("T", " ");
+    },
   },
   mounted() {
-    getUser(userConfig.loggedInUserId).then(
-      (response) => (this.user = response.data)
-    );
+    const { id } = user;
+
+    getUser(id).then((response) => (this.user = response.data));
+    getUserEvents(id).then((response) => (this.userEvents = response.data));
   },
 };
 </script>
