@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
-import Profile from "../views/Profile";
+import Events from "../views/Events.vue";
 
 const routes = [
   {
@@ -9,9 +9,9 @@ const routes = [
     component: Home,
   },
   {
-    path: "/profil",
-    name: "Profile",
-    component: Profile,
+    path: "/esemenyeim",
+    name: "Events",
+    component: Events,
   },
 ];
 

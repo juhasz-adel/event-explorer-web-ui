@@ -37,7 +37,7 @@ import {
 } from "../utils/dateFormatters";
 
 export default {
-  name: "Profile",
+  name: "Events",
   components: {},
   data() {
     return {
