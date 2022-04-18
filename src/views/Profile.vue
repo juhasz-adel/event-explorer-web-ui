@@ -9,7 +9,7 @@
         </div>
       </article>
       <article class="col-sm-6">
-        <h5>Események amiken eddig részt vettél:</h5>
+        <h5>Eseményeid:</h5>
         <div
           class="card mb-1"
           v-for="userEvent in userEvents"
@@ -17,12 +17,8 @@
         >
           <div class="card-body">
             <h5 class="card-title">{{ userEvent.name }}</h5>
-            <p class="card-text">Szervező: {{ userEvent.organizer.name }}</p>
             <p class="card-text">
               Kezdés: {{ convertToReadableDateAndTime(userEvent.startDate) }}
-            </p>
-            <p class="card-text">
-              Vége: {{ convertToReadableDateAndTime(userEvent.endDate) }}
             </p>
           </div>
         </div>
@@ -57,9 +53,7 @@ export default {
         {
           id: 0,
           name: "",
-          organizer: { name: "" },
           startDate: "",
-          endDate: "",
         },
       ],
     };
