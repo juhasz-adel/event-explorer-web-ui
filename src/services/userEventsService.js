@@ -1,6 +1,12 @@
 import restClient from "axios";
 
-const getUserEvents = (userId) =>
-  restClient.get(`https://localhost:5001/api/users/${userId}/events`);
+const getEvents = (userId, isUpcoming) => {
+  const baseUrl =
+    "https://localhost:5001/api/users/${userId}/events?isUpcoming=";
 
-export { getUserEvents };
+  const url = isUpcoming ? `${baseUrl}true` : `${baseUrl}false`;
+
+  return restClient.get(url);
+};
+
+export { getEvents };
