@@ -1,25 +1,28 @@
 <template>
   <div class="container">
-    <section class="row text-center">
+    <section class="row text-center mt-5">
+      <article class="col-sm-12" v-if="userEvents.length === 0">
+        <h5>Nincsenek eseményeid...</h5>
+      </article>
       <article class="col-sm-6">
-        <div class="profile" :id="user.id">
-          <p>E-mail cím: {{ user.email }}</p>
-          <p>Teljes név: {{ user.lastName }} {{ user.firstName }}</p>
-          <p>Születési idő: {{ convertToDateOnly(user.birthDate) }}</p>
+        <div class="upcoming-events" v-if="userEvents.length !== 0">
+          <h5>Eseményeid ebben a hónapban:</h5>
         </div>
       </article>
       <article class="col-sm-6">
-        <h5>Eseményeid:</h5>
-        <div
-          class="card mb-1"
-          v-for="userEvent in userEvents"
-          :key="userEvent.id"
-        >
-          <div class="card-body">
-            <h5 class="card-title">{{ userEvent.name }}</h5>
-            <p class="card-text">
-              Kezdés: {{ convertToReadableDateAndTime(userEvent.startDate) }}
-            </p>
+        <div class="further-events" v-if="userEvents.length !== 0">
+          <h5>Későbbi események:</h5>
+          <div
+            class="card mb-1"
+            v-for="userEvent in userEvents"
+            :key="userEvent.id"
+          >
+            <div class="card-body">
+              <h5 class="card-title">{{ userEvent.name }}</h5>
+              <p class="card-text">
+                Kezdés: {{ convertToReadableDateAndTime(userEvent.startDate) }}
+              </p>
+            </div>
           </div>
         </div>
       </article>
@@ -31,24 +34,13 @@
 import { getUser } from "../services/userService";
 import { getUserEvents } from "../services/userEventsService";
 import user from "../config/user.config.json";
-import {
-  convertToDateOnly,
-  convertToReadableDateAndTime,
-} from "../utils/dateFormatters";
+import { convertToReadableDateAndTime } from "../utils/dateFormatters";
 
 export default {
   name: "Events",
   components: {},
   data() {
     return {
-      user: {
-        id: 0,
-        email: "",
-        password: "",
-        lastName: "",
-        firstName: "",
-        birthDate: "",
-      },
       userEvents: [
         {
           id: 0,
@@ -59,9 +51,6 @@ export default {
     };
   },
   methods: {
-    convertToDateOnly(date) {
-      return convertToDateOnly(date);
-    },
     convertToReadableDateAndTime(date) {
       return convertToReadableDateAndTime(date);
     },
