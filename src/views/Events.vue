@@ -36,9 +36,9 @@
 
 <script>
 import { getUser } from "../services/userService";
-import { getEvents } from "../services/userEventsService";
-import user from "../config/user.config.json";
+import { getUserEvents } from "../services/userEventsService";
 import { convertToReadableDateAndTime } from "../utils/dateFormatters";
+import user from "../config/user.config.json";
 
 export default {
   name: "Events",
@@ -70,10 +70,10 @@ export default {
     const { id } = user;
 
     getUser(id).then((response) => (this.user = response.data));
-    getEvents(id, true).then(
+    getUserEvents(id, true).then(
       (response) => (this.upcomingUserEvents = response.data)
     );
-    getEvents(id, false).then(
+    getUserEvents(id, false).then(
       (response) => (this.furtherUserEvents = response.data)
     );
   },
