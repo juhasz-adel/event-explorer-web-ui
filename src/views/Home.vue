@@ -1,18 +1,47 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
+    <section class="row mt-3 justify-content-md-center">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+        <select class="form-control" v-model="selectedCategoryId">
+          <option value="0">Kérlek válassz kategóriát...</option>
+          <option
+            :id="category.id"
+            v-for="category in categories"
+            v-bind:key="category.id"
+            v-bind:value="category.id"
+          >
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+        <button class="btn btn-primary w-100" v-on:click="filter()">
+          Szűrés
+        </button>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+        <button class="btn btn-primary w-100" v-on:click="restoreFilter()">
+          Szűrés törlése
+        </button>
+      </div>
+    </section>
     <section class="row text-center">
       <article
-        class="card mt-2 col-xs-12 col-sm-12 col-md-6 col-lg-3"
+        class="card mt-2 col-xs-12 col-sm-12 col-md-6 col-lg-4"
         v-for="event in events"
         :key="event.id"
       >
         <div class="card-body">
           <h5 class="card-title">{{ event.name }}</h5>
-          <p class="card-text">Helyszín: {{ event.location.name }}</p>
+          <p class="card-text">Helyszín:<br />{{ event.location.name }}</p>
           <p class="card-text">
-            Időpont: {{ convertToReadableDateAndTime(event.startDate) }}
+            Időpont:<br />
+            {{ convertToReadableDateAndTime(event.startDate) }}
           </p>
-          <p class="card-text">Szervező: {{ event.organizer.name }}</p>
+          <p class="card-text">Szervező:<br />{{ event.organizer.name }}</p>
+          <p class="card-text">
+            Maximum létszám:<br />{{ event.location.maximumHeadCount }} fő
+          </p>
           <button
             v-if="isLoggedIn()"
             class="btn btn-primary"
@@ -22,6 +51,12 @@
           >
             Érdekel
           </button>
+          <div
+            class="alert alert-danger mt-2"
+            v-if="this.error.message !== '' && error.eventId === event.id"
+          >
+            {{ error.message }}
+          </div>
         </div>
       </article>
     </section>
@@ -30,10 +65,12 @@
 
 <script>
 import { getEvents } from "../services/eventService";
+import { getCategories } from "../services/categoryService";
 import { attend } from "../services/attendanceService";
 import { convertToReadableDateAndTime } from "../utils/dateFormatters";
-import user from "../config/user.config.json";
 import { isLoggedIn } from "../utils/userLoggedInChecker";
+import { getCategoryEvents } from "../services/categoryEventsService";
+import user from "../config/user.config.json";
 
 export default {
   name: "Home",
@@ -45,10 +82,16 @@ export default {
           id: 0,
           name: "",
           organizer: { name: "" },
-          location: { name: "" },
+          location: { name: "", maximumHeadCount: 0 },
           startDate: "",
         },
       ],
+      categories: [{ id: 0, name: "" }],
+      selectedCategoryId: 0,
+      error: {
+        eventId: 0,
+        message: "",
+      },
     };
   },
   methods: {
@@ -57,15 +100,31 @@ export default {
     },
     attendToEvent(eventId) {
       const { id: userId } = user;
-      attend(userId, eventId);
+      attend(userId, eventId)
+        .catch((error) => error.code === 400)
+        .then(
+          () =>
+            (this.error.message =
+              "Ezen az eseményen már jelenzted a részvételed!")
+        )
+        .then(() => (this.error.eventId = eventId));
     },
     isLoggedIn() {
       const { id: userId } = user;
       return isLoggedIn(userId);
     },
+    filter() {
+      getCategoryEvents(this.selectedCategoryId).then(
+        (response) => (this.events = response.data)
+      );
+    },
+    restoreFilter() {
+      getEvents().then((response) => (this.events = response.data));
+    },
   },
   mounted() {
     getEvents().then((response) => (this.events = response.data));
+    getCategories().then((response) => (this.categories = response.data));
   },
 };
 </script>
