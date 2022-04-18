@@ -1,5 +1,21 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
+    <section class="row mt-3">
+      <div class="form-group">
+        <label>Kategóriák</label>
+        <select class="form-control">
+          <option value="0">Kérlek válassz kategóriát...</option>
+          <option
+            v-for="category in categories"
+            :id="category.id"
+            v-bind:key="category.id"
+          >
+            {{ category.name }}
+          </option>
+        </select>
+        <button class="btn btn-primary">Szűrés</button>
+      </div>
+    </section>
     <section class="row text-center">
       <article
         class="card mt-2 col-xs-12 col-sm-12 col-md-6 col-lg-3"
@@ -13,6 +29,9 @@
             Időpont: {{ convertToReadableDateAndTime(event.startDate) }}
           </p>
           <p class="card-text">Szervező: {{ event.organizer.name }}</p>
+          <p class="card-text">
+            Maximum létszám: {{ event.location.maximumHeadCount }} fő
+          </p>
           <button
             v-if="isLoggedIn()"
             class="btn btn-primary"
@@ -30,10 +49,11 @@
 
 <script>
 import { getEvents } from "../services/eventService";
+import { getCategories } from "../services/categoryService";
 import { attend } from "../services/attendanceService";
 import { convertToReadableDateAndTime } from "../utils/dateFormatters";
-import user from "../config/user.config.json";
 import { isLoggedIn } from "../utils/userLoggedInChecker";
+import user from "../config/user.config.json";
 
 export default {
   name: "Home",
@@ -45,10 +65,11 @@ export default {
           id: 0,
           name: "",
           organizer: { name: "" },
-          location: { name: "" },
+          location: { name: "", maximumHeadCount: 0 },
           startDate: "",
         },
       ],
+      categories: [{ id: 0, name: "" }],
     };
   },
   methods: {
@@ -66,6 +87,7 @@ export default {
   },
   mounted() {
     getEvents().then((response) => (this.events = response.data));
+    getCategories().then((response) => (this.categories = response.data));
   },
 };
 </script>
