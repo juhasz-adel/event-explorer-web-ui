@@ -1,27 +1,46 @@
 <template>
-  <div class="container-fluid">
-    <section class="row text-center">
+  <div class="container">
+    <section class="row text-center mt-5">
       <article
-        class="card mt-2 col-xs-12 col-sm-12 col-md-6 col-lg-3"
-        v-for="event in events"
-        :key="event.id"
+        class="col-sm-12"
+        v-if="upcomingUserEvents.length === 0 && furtherUserEvents.length === 0"
       >
-        <div class="card-body">
-          <h5 class="card-title">{{ event.name }}</h5>
-          <p class="card-text">Helyszín: {{ event.location.name }}</p>
-          <p class="card-text">
-            Időpont: {{ convertToReadableDateAndTime(event.startDate) }}
-          </p>
-          <p class="card-text">Szervező: {{ event.organizer.name }}</p>
-          <button
-            v-if="isLoggedIn()"
-            class="btn btn-primary"
-            :id="event.id"
-            :key="event.id"
-            v-on:click="attendToEvent(event.id)"
+        <h5>Sajnos nincsenek eseményeid...</h5>
+      </article>
+      <article class="col-sm-6">
+        <div class="upcoming-events" v-if="upcomingUserEvents.length > 0">
+          <h5>Eseményeid ebben a hónapban:</h5>
+          <div
+            class="card mb-1"
+            v-for="upcomingUserEvent in upcomingUserEvents"
+            :key="upcomingUserEvent.id"
           >
-            Érdekel
-          </button>
+            <div class="card-body">
+              <h5 class="card-title">{{ upcomingUserEvent.name }}</h5>
+              <p class="card-text">
+                Kezdés:
+                {{ convertToReadableDateAndTime(upcomingUserEvent.startDate) }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="col-sm-6">
+        <div class="further-events" v-if="furtherUserEvents.length > 0">
+          <h5>Későbbi eseményeid:</h5>
+          <div
+            class="card mb-1"
+            v-for="furtherUserEvent in furtherUserEvents"
+            :key="furtherUserEvent.id"
+          >
+            <div class="card-body">
+              <h5 class="card-title">{{ furtherUserEvent.name }}</h5>
+              <p class="card-text">
+                Kezdés:
+                {{ convertToReadableDateAndTime(furtherUserEvent.startDate) }}
+              </p>
+            </div>
+          </div>
         </div>
       </article>
     </section>
@@ -29,23 +48,27 @@
 </template>
 
 <script>
-import { getEvents } from "../services/eventService";
-import { attend } from "../services/attendanceService";
+import { getUser } from "../services/userService";
+import { getUserEvents } from "../services/userEventsService";
 import { convertToReadableDateAndTime } from "../utils/dateFormatters";
 import user from "../config/user.config.json";
-import { isLoggedIn } from "../utils/userLoggedInChecker";
 
 export default {
   name: "Events",
   components: {},
   data() {
     return {
-      events: [
+      upcomingUserEvents: [
         {
           id: 0,
           name: "",
-          organizer: { name: "" },
-          location: { name: "" },
+          startDate: "",
+        },
+      ],
+      furtherUserEvents: [
+        {
+          id: 0,
+          name: "",
           startDate: "",
         },
       ],
@@ -55,17 +78,17 @@ export default {
     convertToReadableDateAndTime(date) {
       return convertToReadableDateAndTime(date);
     },
-    attendToEvent(eventId) {
-      const { id: userId } = user;
-      attend(userId, eventId);
-    },
-    isLoggedIn() {
-      const { id: userId } = user;
-      return isLoggedIn(userId);
-    },
   },
   mounted() {
-    getEvents().then((response) => (this.events = response.data));
+    const { id } = user;
+
+    getUser(id).then((response) => (this.user = response.data));
+    getUserEvents(id, true).then(
+      (response) => (this.upcomingUserEvents = response.data)
+    );
+    getUserEvents(id, false).then(
+      (response) => (this.furtherUserEvents = response.data)
+    );
   },
 };
 </script>
