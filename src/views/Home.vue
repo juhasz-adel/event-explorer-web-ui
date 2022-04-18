@@ -36,7 +36,7 @@ import user from "../config/user.config.json";
 import { isLoggedIn } from "../utils/userLoggedInChecker";
 
 export default {
-  name: "Events",
+  name: "Home",
   components: {},
   data() {
     return {
