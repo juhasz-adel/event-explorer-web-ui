@@ -3,17 +3,21 @@
     <section class="row mt-3">
       <div class="form-group">
         <label>Kategóriák</label>
-        <select class="form-control">
+        <select class="form-control" v-model="selectedCategoryId">
           <option value="0">Kérlek válassz kategóriát...</option>
           <option
-            v-for="category in categories"
             :id="category.id"
+            v-for="category in categories"
             v-bind:key="category.id"
+            v-bind:value="category.id"
           >
             {{ category.name }}
           </option>
         </select>
-        <button class="btn btn-primary">Szűrés</button>
+        <button class="btn btn-primary" v-on:click="filter()">Szűrés</button>
+        <button class="btn btn-primary" v-on:click="restoreFilter()">
+          Szűrés törlése
+        </button>
       </div>
     </section>
     <section class="row text-center">
@@ -53,6 +57,7 @@ import { getCategories } from "../services/categoryService";
 import { attend } from "../services/attendanceService";
 import { convertToReadableDateAndTime } from "../utils/dateFormatters";
 import { isLoggedIn } from "../utils/userLoggedInChecker";
+import { getCategoryEvents } from "../services/categoryEventsService";
 import user from "../config/user.config.json";
 
 export default {
@@ -70,6 +75,7 @@ export default {
         },
       ],
       categories: [{ id: 0, name: "" }],
+      selectedCategoryId: 0,
     };
   },
   methods: {
@@ -83,6 +89,14 @@ export default {
     isLoggedIn() {
       const { id: userId } = user;
       return isLoggedIn(userId);
+    },
+    filter() {
+      getCategoryEvents(this.selectedCategoryId).then(
+        (response) => (this.events = response.data)
+      );
+    },
+    restoreFilter() {
+      getEvents().then((response) => (this.events = response.data));
     },
   },
   mounted() {
