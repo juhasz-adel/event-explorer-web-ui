@@ -10,6 +10,19 @@
       <article class="col-sm-6">
         <div class="upcoming-events" v-if="upcomingUserEvents.length !== 0">
           <h5>Eseményeid ebben a hónapban:</h5>
+          <div
+            class="card mb-1"
+            v-for="upcomingUserEvent in upcomingUserEvents"
+            :key="upcomingUserEvent.id"
+          >
+            <div class="card-body">
+              <h5 class="card-title">{{ upcomingUserEvent.name }}</h5>
+              <p class="card-text">
+                Kezdés:
+                {{ convertToReadableDateAndTime(upcomingUserEvent.startDate) }}
+              </p>
+            </div>
+          </div>
         </div>
       </article>
       <article class="col-sm-6">
