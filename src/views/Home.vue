@@ -51,6 +51,12 @@
           >
             Érdekel
           </button>
+          <div
+            class="alert alert-danger mt-2"
+            v-if="this.error.message !== '' && error.eventId === event.id"
+          >
+            {{ error.message }}
+          </div>
         </div>
       </article>
     </section>
@@ -82,6 +88,10 @@ export default {
       ],
       categories: [{ id: 0, name: "" }],
       selectedCategoryId: 0,
+      error: {
+        eventId: 0,
+        message: "",
+      },
     };
   },
   methods: {
@@ -90,7 +100,14 @@ export default {
     },
     attendToEvent(eventId) {
       const { id: userId } = user;
-      attend(userId, eventId);
+      attend(userId, eventId)
+        .catch((error) => error.code === 400)
+        .then(
+          () =>
+            (this.error.message =
+              "Ezen az eseményen már jelenzted a részvételed!")
+        )
+        .then(() => (this.error.eventId = eventId));
     },
     isLoggedIn() {
       const { id: userId } = user;
