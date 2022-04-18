@@ -18,10 +18,10 @@
     <div :class="getNavbarCollapseClass()">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" v-bind:href="'/'">Események</a>
+          <a class="nav-link" v-bind:href="'/'">Főoldal</a>
         </li>
         <li class="nav-item" v-if="isLoggedIn()">
-          <a class="nav-link" v-bind:href="'/profil'">Profil</a>
+          <a class="nav-link" v-bind:href="'/esemenyeim'">Eseményeim</a>
         </li>
       </ul>
     </div>
