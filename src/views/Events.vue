@@ -5,10 +5,10 @@
         class="col-sm-12"
         v-if="upcomingUserEvents.length === 0 && furtherUserEvents.length === 0"
       >
-        <h5>Nincsenek eseményeid...</h5>
+        <h5>Sajnos nincsenek eseményeid...</h5>
       </article>
       <article class="col-sm-6">
-        <div class="upcoming-events" v-if="upcomingUserEvents.length !== 0">
+        <div class="upcoming-events" v-if="upcomingUserEvents.length > 0">
           <h5>Eseményeid ebben a hónapban:</h5>
           <div
             class="card mb-1"
@@ -26,8 +26,8 @@
         </div>
       </article>
       <article class="col-sm-6">
-        <div class="further-events" v-if="furtherUserEvents.length !== 0">
-          <h5>Későbbi események:</h5>
+        <div class="further-events" v-if="furtherUserEvents.length > 0">
+          <h5>Későbbi eseményeid:</h5>
           <div
             class="card mb-1"
             v-for="furtherUserEvent in furtherUserEvents"
